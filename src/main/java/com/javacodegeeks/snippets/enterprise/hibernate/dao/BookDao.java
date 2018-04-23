@@ -12,85 +12,85 @@ import com.javacodegeeks.snippets.enterprise.hibernate.model.Book;
 
 public class BookDao implements BookDaoInterface<Book, String> {
 
-	private Session currentSession;
-	
-	private Transaction currentTransaction;
+    private Session currentSession;
 
-	public BookDao() {
-	}
+    private Transaction currentTransaction;
 
-	public Session openCurrentSession() {
-		currentSession = getSessionFactory().openSession();
-		return currentSession;
-	}
+    public BookDao() {
+    }
 
-	public Session openCurrentSessionwithTransaction() {
-		currentSession = getSessionFactory().openSession();
-		currentTransaction = currentSession.beginTransaction();
-		return currentSession;
-	}
-	
-	public void closeCurrentSession() {
-		currentSession.close();
-	}
-	
-	public void closeCurrentSessionwithTransaction() {
-		currentTransaction.commit();
-		currentSession.close();
-	}
-	
-	private static SessionFactory getSessionFactory() {
-		Configuration configuration = new Configuration().configure();
-		StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
-				.applySettings(configuration.getProperties());
-		SessionFactory sessionFactory = configuration.buildSessionFactory(builder.build());
-		return sessionFactory;
-	}
+    public Session openCurrentSession() {
+        currentSession = getSessionFactory().openSession();
+        return currentSession;
+    }
 
-	public Session getCurrentSession() {
-		return currentSession;
-	}
+    public Session openCurrentSessionwithTransaction() {
+        currentSession = getSessionFactory().openSession();
+        currentTransaction = currentSession.beginTransaction();
+        return currentSession;
+    }
 
-	public void setCurrentSession(Session currentSession) {
-		this.currentSession = currentSession;
-	}
+    public void closeCurrentSession() {
+        currentSession.close();
+    }
 
-	public Transaction getCurrentTransaction() {
-		return currentTransaction;
-	}
+    public void closeCurrentSessionwithTransaction() {
+        currentTransaction.commit();
+        currentSession.close();
+    }
 
-	public void setCurrentTransaction(Transaction currentTransaction) {
-		this.currentTransaction = currentTransaction;
-	}
+    private static SessionFactory getSessionFactory() {
+        Configuration configuration = new Configuration().configure();
+        StandardServiceRegistryBuilder builder = new StandardServiceRegistryBuilder()
+                .applySettings(configuration.getProperties());
+        SessionFactory sessionFactory = configuration.buildSessionFactory(builder.build());
+        return sessionFactory;
+    }
 
-	public void persist(Book entity) {
-		getCurrentSession().save(entity);
-	}
+    public Session getCurrentSession() {
+        return currentSession;
+    }
 
-	public void update(Book entity) {
-		getCurrentSession().update(entity);
-	}
 
-	public Book findById(String id) {
-		Book book = (Book) getCurrentSession().get(Book.class, id);
-		return book; 
-	}
+    public void persist(Book entity) {
+        getCurrentSession().save(entity);
+    }
 
-	public void delete(Book entity) {
-		getCurrentSession().delete(entity);
-	}
+    public void update(Book entity) {
+        getCurrentSession().update(entity);
+    }
 
-	@SuppressWarnings("unchecked")
-	public List<Book> findAll() {
-		List<Book> books = (List<Book>) getCurrentSession().createQuery("from Book").list();
-		return books;
-	}
+    public Book findById(String id) {
+        Book book = (Book) getCurrentSession().get(Book.class, id);
+        return book;
+    }
 
-	public void deleteAll() {
-		List<Book> entityList = findAll();
-		for (Book entity : entityList) {
-			delete(entity);
-		}
-	}
+    public void delete(Book entity) {
+        getCurrentSession().delete(entity);
+    }
 
+    @SuppressWarnings("unchecked")
+    public List<Book> findAll() {
+        List<Book> books = (List<Book>) getCurrentSession().createQuery("from Book").list();
+        return books;
+    }
+
+    public void deleteAll() {
+        List<Book> entityList = findAll();
+        for (Book entity : entityList) {
+            delete(entity);
+        }
+    }
+
+    public void setCurrentSession(Session currentSession) {
+        this.currentSession = currentSession;
+    }
+
+    public Transaction getCurrentTransaction() {
+        return currentTransaction;
+    }
+
+    public void setCurrentTransaction(Transaction currentTransaction) {
+        this.currentTransaction = currentTransaction;
+    }
 }
